@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YWCA 업무스타일 테스트</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: "Pretendard", "Noto Sans KR", sans-serif;
+    background: linear-gradient(180deg, #fff8ec 0%, #eefaf6 100%);
+    color: #333;
+  }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 18px 60px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 28px;
+    padding: 28px 22px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    text-align: center;
+  }
+
+  .character {
+    width: 150px;
+    max-width: 45%;
+    margin: 0 auto 14px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: #e1f4ee;
+    color: #13876b;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: 30px;
+    line-height: 1.25;
+    margin: 8px 0 12px;
+    color: #174f46;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #666;
+    margin-bottom: 24px;
+  }
+
+  .start-btn,
+  .option-btn,
+  .restart-btn {
+    border: none;
+    cursor: pointer;
+    border-radius: 18px;
+    font-weight: 800;
+    transition: 0.2s;
+  }
+
+  .start-btn {
+    width: 100%;
+    padding: 17px;
+    font-size: 18px;
+    background: #f5a623;
+    color: #fff;
+  }
+
+  .start-btn:hover {
+    transform: translateY(-2px);
+    background: #ee9711;
+  }
+
+  .progress {
+    height: 12px;
+    background: #e8eee9;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 22px;
+  }
+
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #47b39d, #f5a623);
+    transition: 0.3s;
+  }
+
+  .question-no {
+    color: #47b39d;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+
+  .question {
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1.45;
+    color: #174f46;
+    margin-bottom: 24px;
+  }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 16px;
+    margin: 8px 0;
+    background: #f8faf8;
+    border: 2px solid #e1ebe6;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: left;
+  }
+
+  .option-btn:hover {
+    background: #e9f7f2;
+    border-color: #47b39d;
+  }
+
+  .result-type {
+    font-size: 28px;
+    font-weight: 900;
+    color: #174f46;
+    margin: 10px 0;
+  }
+
+  .result-desc {
+    line-height: 1.8;
+    color: #555;
+    font-size: 16px;
+    margin: 16px 0 22px;
+    text-align: left;
+  }
+
+  .result-box {
+    background: #f7fbf8;
+    border-radius: 20px;
+    padding: 18px;
+    margin: 16px 0;
+    text-align: left;
+  }
+
+  .result-box h3 {
+    margin: 0 0 10px;
+    color: #13876b;
+    font-size: 18px;
+  }
+
+  .result-box ul {
+    margin: 0;
+    padding-left: 20px;
+    line-height: 1.8;
+  }
+
+  .restart-btn {
+    width: 100%;
+    padding: 16px;
+    margin-top: 18px;
+    background: #174f46;
+    color: #fff;
+    font-size: 17px;
+  }
+
+  .small {
+    font-size: 13px;
+    color: #888;
+    margin-top: 18px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <section id="start" class="card">
+    <img src="yeoni.png" alt="연이 캐릭터" class="character" />
+    <div class="badge">YWCA Team Building Test</div>
+    <h1>나는 어떤<br>업무스타일일까?</h1>
+    <p class="subtitle">
+      업무할 때 나는 빠른 추진형일까,<br>
+      꼼꼼한 설계형일까?<br><br>
+      간단한 질문을 통해 나의 협업 스타일을 알아보고,<br>
+      우리 팀의 시너지를 찾아보세요.
+    </p>
+    <button class="start-btn" onclick="startTest()">테스트 시작하기</button>
+    <p class="small">※ 본 테스트는 팀빌딩과 자기이해를 위한 활동용 검사입니다.</p>
+  </section>
+
+  <section id="quiz" class="card" style="display:none;">
+    <div class="progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="question-no" id="questionNo"></div>
+    <div class="question" id="questionText"></div>
+    <div id="options"></div>
+  </section>
+
+  <section id="result" class="card" style="display:none;">
+    <img src="yeoni.png" alt="연이 캐릭터" class="character" />
+    <div class="badge">나의 업무스타일 결과</div>
+    <div class="result-type" id="resultType"></div>
+    <div class="result-desc" id="resultDesc"></div>
+
+    <div class="result-box">
+      <h3>강점</h3>
+      <ul id="strengths"></ul>
+    </div>
+
+    <div class="result-box">
+      <h3>협업 팁</h3>
+      <ul id="tips"></ul>
+    </div>
+
+    <button class="restart-btn" onclick="restartTest()">다시 테스트하기</button>
+  </section>
+
+</div>
+
+<script>
+const questions = [
+  {
+    q: "새로운 사업이나 업무를 맡았을 때 나는?",
+    options: [
+      { text: "일단 방향을 잡고 빠르게 움직인다", type: "driver" },
+      { text: "목표, 일정, 역할을 먼저 정리한다", type: "planner" }
+    ]
+  },
+  {
+    q: "회의에서 나는 주로?",
+    options: [
+      { text: "핵심 의견을 먼저 제안하는 편이다", type: "driver" },
+      { text: "사람들의 의견을 듣고 분위기를 조율한다", type: "connector" }
+    ]
+  },
+  {
+    q: "자료를 만들 때 가장 신경 쓰는 것은?",
+    options: [
+      { text: "전달력과 실행 가능성", type: "driver" },
+      { text: "근거와 정확성", type: "analyst" }
+    ]
+  },
+  {
+    q: "행사 준비 중 예상 밖 문제가 생기면?",
+    options: [
+      { text: "현장에서 바로 대안을 찾는다", type: "driver" },
+      { text: "원인을 파악하고 재발 방지까지 생각한다", type: "analyst" }
+    ]
+  },
+  {
+    q: "팀 프로젝트에서 내가 편한 역할은?",
+    options: [
+      { text: "전체 일정과 순서를 정리하는 역할", type: "planner" },
+      { text: "팀원들이 편하게 참여하도록 돕는 역할", type: "connector" }
+    ]
+  },
+  {
+    q: "업무를 시작하기 전 나는?",
+    options: [
+      { text: "체크리스트와 자료를 먼저 정리한다", type: "planner" },
+      { text: "필요한 사람들과 먼저 이야기해본다", type: "connector" }
+    ]
+  },
+  {
+    q: "내가 중요하게 생각하는 업무 방식은?",
+    options: [
+      { text: "목표를 향해 속도감 있게 진행하는 것", type: "driver" },
+      { text: "함께 일하는 사람들이 소외되지 않는 것", type: "connector" }
+    ]
+  },
+  {
+    q: "보고서나 제안서를 볼 때 나는?",
+    options: [
+      { text: "전체 흐름과 구성부터 본다", type: "planner" },
+      { text: "수치, 근거, 표현의 정확성을 본다", type: "analyst" }
+    ]
+  },
+  {
+    q: "업무 마감이 가까워지면?",
+    options: [
+      { text: "우선순위를 정하고 빠르게 처리한다", type: "driver" },
+      { text: "빠진 부분이 없는지 끝까지 점검한다", type: "analyst" }
+    ]
+  },
+  {
+    q: "좋은 팀이라고 느끼는 순간은?",
+    options: [
+      { text: "역할과 일정이 명확하게 정리되어 있을 때", type: "planner" },
+      { text: "서로 편하게 말하고 도와줄 수 있을 때", type: "connector" }
+    ]
+  }
+];
+
+const results = {
+  driver: {
+    title: "🚀 추진형 연이",
+    desc: "당신은 방향이 정해지면 빠르게 움직이는 실행 중심 업무스타일입니다. 일이 멈춰 있을 때 흐름을 만들고, 팀이 앞으로 나아가도록 에너지를 주는 사람입니다.",
+    strengths: ["결정과 실행이 빠릅니다.", "위기 상황에서 대처력이 좋습니다.", "팀의 추진력을 높입니다."],
+    tips: ["충분한 설명을 함께하면 신뢰가 더 높아집니다.", "속도만큼 팀원의 이해도도 확인해보세요.", "계획형, 분석형과 함께하면 완성도가 올라갑니다."]
+  },
+  planner: {
+    title: "🧭 설계형 연이",
+    desc: "당신은 전체 흐름을 보고 체계적으로 준비하는 업무스타일입니다. 일정, 역할, 절차를 정리하며 팀이 안정적으로 움직이도록 기반을 만드는 사람입니다.",
+    strengths: ["업무 구조화에 강합니다.", "일정과 역할 정리가 뛰어납니다.", "실수를 줄이고 안정감을 줍니다."],
+    tips: ["완벽한 계획보다 적절한 시작도 중요합니다.", "추진형과 협업하면 실행 속도가 빨라집니다.", "계획을 공유 가능한 언어로 풀어주면 좋습니다."]
+  },
+  connector: {
+    title: "🤝 조율형 연이",
+    desc: "당신은 사람과 관계를 중심에 두는 협업형 업무스타일입니다. 팀 분위기를 살피고, 의견을 연결하며, 함께 일하는 힘을 만들어내는 사람입니다.",
+    strengths: ["소통과 분위기 조성에 강합니다.", "갈등을 줄이고 참여를 이끌어냅니다.", "팀워크를 높입니다."],
+    tips: ["모두를 배려하느라 자신의 부담이 커지지 않게 조절하세요.", "결정이 필요한 순간에는 기준을 명확히 세워보세요.", "분석형, 추진형과 함께하면 균형이 좋아집니다."]
+  },
+  analyst: {
+    title: "🔍 분석형 연이",
+    desc: "당신은 근거와 정확성을 중요하게 보는 검토 중심 업무스타일입니다. 자료의 허점을 찾고, 더 탄탄한 결과물이 나오도록 돕는 사람입니다.",
+    strengths: ["근거와 논리에 강합니다.", "오류와 리스크를 잘 발견합니다.", "결과물의 신뢰도를 높입니다."],
+    tips: ["검토 의견을 제안형으로 전달하면 협업이 부드러워집니다.", "때로는 완벽보다 마감도 중요합니다.", "조율형과 함께하면 전달력이 좋아집니다."]
+  }
+};
+
+let current = 0;
+let scores = {
+  driver: 0,
+  planner: 0,
+  connector: 0,
+  analyst: 0
+};
+
+function startTest() {
+  document.getElementById("start").style.display = "none";
+  document.getElementById("quiz").style.display = "block";
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[current];
+
+  document.getElementById("questionNo").innerText = `${current + 1} / ${questions.length}`;
+  document.getElementById("questionText").innerText = q.q;
+  document.getElementById("progressBar").style.width = `${(current / questions.length) * 100}%`;
+
+  const optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+
+  q.options.forEach(option => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.innerText = option.text;
+    btn.onclick = () => selectOption(option.type);
+    optionsDiv.appendChild(btn);
+  });
+}
+
+function selectOption(type) {
+  scores[type]++;
+  current++;
+
+  if (current < questions.length) {
+    showQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  document.getElementById("quiz").style.display = "none";
+  document.getElementById("result").style.display = "block";
+  document.getElementById("progressBar").style.width = "100%";
+
+  let topType = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+  const result = results[topType];
+
+  document.getElementById("resultType").innerText = result.title;
+  document.getElementById("resultDesc").innerText = result.desc;
+
+  document.getElementById("strengths").innerHTML =
+    result.strengths.map(item => `<li>${item}</li>`).join("");
+
+  document.getElementById("tips").innerHTML =
+    result.tips.map(item => `<li>${item}</li>`).join("");
+}
+
+function restartTest() {
+  current = 0;
+  scores = {
+    driver: 0,
+    planner: 0,
+    connector: 0,
+    analyst: 0
+  };
+
+  document.getElementById("result").style.display = "none";
+  document.getElementById("start").style.display = "block";
+}
+</script>
+</body>
+</html>
