@@ -30,8 +30,8 @@ body {
 }
 
 .character {
-  width: 180px;
-  max-width: 70%;
+  width: 190px;
+  max-width: 75%;
   margin: 0 auto 14px;
   display: block;
 }
@@ -43,12 +43,12 @@ body {
   background: #e1f4ee;
   color: #13876b;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 12px;
 }
 
 h1 {
-  font-size: 30px;
+  font-size: 32px;
   line-height: 1.25;
   margin: 8px 0 12px;
   color: #174f46;
@@ -79,9 +79,10 @@ h1 {
   color: #fff;
 }
 
-.start-btn:hover {
+.start-btn:hover,
+.option-btn:hover,
+.restart-btn:hover {
   transform: translateY(-2px);
-  background: #ee9711;
 }
 
 .progress {
@@ -101,7 +102,7 @@ h1 {
 
 .question-no {
   color: #47b39d;
-  font-weight: 800;
+  font-weight: 900;
   margin-bottom: 10px;
 }
 
@@ -110,12 +111,12 @@ h1 {
   font-weight: 900;
   line-height: 1.45;
   color: #174f46;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .option-btn {
   width: 100%;
-  padding: 18px 16px;
+  padding: 16px 16px;
   margin: 8px 0;
   background: #f8faf8;
   border: 2px solid #e1ebe6;
@@ -131,7 +132,7 @@ h1 {
 }
 
 .result-type {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 900;
   color: #174f46;
   margin: 10px 0;
@@ -187,13 +188,12 @@ h1 {
 <div class="wrap">
 
 <section id="start" class="card">
-  <img src="images/main.png" alt="연이 캐릭터" class="character">
+  <img src="main.png" alt="연이 캐릭터" class="character">
   <div class="badge">YWCA Team Building Test</div>
   <h1>나는 어떤<br>업무스타일일까?</h1>
   <p class="subtitle">
-    업무할 때 나는 빠른 추진형일까,<br>
-    꼼꼼한 설계형일까?<br><br>
-    간단한 질문을 통해 나의 협업 스타일을 알아보고,<br>
+    실제 업무 상황 속에서 내가 어떤 방식으로 일하는지 알아보는 테스트입니다.<br><br>
+    결과를 통해 나의 강점과 협업 스타일을 확인하고,<br>
     우리 팀의 시너지를 찾아보세요.
   </p>
   <button class="start-btn" onclick="startTest()">테스트 시작하기</button>
@@ -210,7 +210,7 @@ h1 {
 </section>
 
 <section id="result" class="card" style="display:none;">
-  <img src="images/main.png" alt="결과 연이 캐릭터" class="character" id="resultImage">
+  <img src="main.png" alt="결과 연이 캐릭터" class="character" id="resultImage">
   <div class="badge">나의 업무스타일 결과</div>
   <div class="result-type" id="resultType"></div>
   <div class="result-desc" id="resultDesc"></div>
@@ -225,6 +225,11 @@ h1 {
     <ul id="tips"></ul>
   </div>
 
+  <div class="result-box">
+    <h3>찰떡 파트너</h3>
+    <ul id="partners"></ul>
+  </div>
+
   <button class="restart-btn" onclick="restartTest()">다시 테스트하기</button>
 </section>
 
@@ -233,73 +238,147 @@ h1 {
 <script>
 const questions = [
   {
-    q: "새로운 사업이나 업무를 맡았을 때 나는?",
+    q: "Q1. 새로운 사업 아이디어가 떠올랐다. 가장 먼저 나는?",
     options: [
-      { text: "일단 방향을 잡고 빠르게 움직인다", type: "driver" },
-      { text: "목표, 일정, 역할을 먼저 정리한다", type: "planner" }
+      { text: "🚀 일단 실행 가능한 것부터 바로 시도해본다", type: "driver" },
+      { text: "🧭 목표, 일정, 역할을 먼저 정리한다", type: "planner" },
+      { text: "🤝 함께할 사람들과 의견을 나눠본다", type: "connector" },
+      { text: "🔍 비슷한 사례와 근거자료를 찾아본다", type: "analyst" }
     ]
   },
   {
-    q: "회의에서 나는 주로?",
+    q: "Q2. 회의 시간이 되었다. 나는 주로?",
     options: [
-      { text: "핵심 의견을 먼저 제안하는 편이다", type: "driver" },
-      { text: "사람들의 의견을 듣고 분위기를 조율한다", type: "connector" }
+      { text: "🚀 핵심 의견을 먼저 제안한다", type: "driver" },
+      { text: "🧭 회의 흐름과 안건을 정리한다", type: "planner" },
+      { text: "🤝 사람들의 분위기와 반응을 살핀다", type: "connector" },
+      { text: "🔍 빠진 쟁점이나 확인할 내용을 체크한다", type: "analyst" }
     ]
   },
   {
-    q: "자료를 만들 때 가장 신경 쓰는 것은?",
+    q: "Q3. 행사 하루 전, 갑자기 문제가 생겼다!",
     options: [
-      { text: "전달력과 실행 가능성", type: "driver" },
-      { text: "근거와 정확성", type: "analyst" }
+      { text: "🚀 대체안을 바로 찾고 움직인다", type: "driver" },
+      { text: "🧭 전체 일정과 역할을 다시 배치한다", type: "planner" },
+      { text: "🤝 참여자와 팀원에게 먼저 상황을 안내한다", type: "connector" },
+      { text: "🔍 문제가 생긴 원인과 영향을 먼저 파악한다", type: "analyst" }
     ]
   },
   {
-    q: "행사 준비 중 예상 밖 문제가 생기면?",
+    q: "Q4. 보고서를 작성해야 한다면?",
     options: [
-      { text: "현장에서 바로 대안을 찾는다", type: "driver" },
-      { text: "원인을 파악하고 재발 방지까지 생각한다", type: "analyst" }
+      { text: "🚀 핵심 메시지부터 빠르게 잡는다", type: "driver" },
+      { text: "🧭 목차와 구성부터 만든다", type: "planner" },
+      { text: "🤝 읽는 사람이 이해하기 쉽게 표현한다", type: "connector" },
+      { text: "🔍 수치, 근거, 표현의 정확성을 확인한다", type: "analyst" }
     ]
   },
   {
-    q: "팀 프로젝트에서 내가 편한 역할은?",
+    q: "Q5. 팀원이 업무로 힘들어 보인다.",
     options: [
-      { text: "전체 일정과 순서를 정리하는 역할", type: "planner" },
-      { text: "팀원들이 편하게 참여하도록 돕는 역할", type: "connector" }
+      { text: "🚀 당장 도울 수 있는 일을 나눠 맡는다", type: "driver" },
+      { text: "🧭 업무량과 마감일을 함께 정리해준다", type: "planner" },
+      { text: "🤝 먼저 이야기를 듣고 마음을 살핀다", type: "connector" },
+      { text: "🔍 어려움의 원인이 무엇인지 같이 분석한다", type: "analyst" }
     ]
   },
   {
-    q: "업무를 시작하기 전 나는?",
+    q: "Q6. 마감이 가까워질수록 나는?",
     options: [
-      { text: "체크리스트와 자료를 먼저 정리한다", type: "planner" },
-      { text: "필요한 사람들과 먼저 이야기해본다", type: "connector" }
+      { text: "🚀 우선 끝내는 것에 집중한다", type: "driver" },
+      { text: "🧭 체크리스트대로 빠진 일을 확인한다", type: "planner" },
+      { text: "🤝 팀원들의 진행상황을 확인한다", type: "connector" },
+      { text: "🔍 오류와 리스크를 끝까지 점검한다", type: "analyst" }
     ]
   },
   {
-    q: "내가 중요하게 생각하는 업무 방식은?",
+    q: "Q7. 새로운 협력기관을 만난다면?",
     options: [
-      { text: "목표를 향해 속도감 있게 진행하는 것", type: "driver" },
-      { text: "함께 일하는 사람들이 소외되지 않는 것", type: "connector" }
+      { text: "🚀 바로 협력 가능한 일을 제안한다", type: "driver" },
+      { text: "🧭 협력 절차와 역할을 정리한다", type: "planner" },
+      { text: "🤝 관계를 만들고 신뢰를 쌓는 데 집중한다", type: "connector" },
+      { text: "🔍 기관의 특성과 필요를 먼저 파악한다", type: "analyst" }
     ]
   },
   {
-    q: "보고서나 제안서를 볼 때 나는?",
+    q: "Q8. 일이 너무 많이 몰렸다!",
     options: [
-      { text: "전체 흐름과 구성부터 본다", type: "planner" },
-      { text: "수치, 근거, 표현의 정확성을 본다", type: "analyst" }
+      { text: "🚀 급한 것부터 쳐낸다", type: "driver" },
+      { text: "🧭 우선순위와 일정을 다시 짠다", type: "planner" },
+      { text: "🤝 도움을 요청하거나 역할을 조율한다", type: "connector" },
+      { text: "🔍 어떤 일이 병목인지 먼저 확인한다", type: "analyst" }
     ]
   },
   {
-    q: "업무 마감이 가까워지면?",
+    q: "Q9. 내가 가장 듣고 싶은 칭찬은?",
     options: [
-      { text: "우선순위를 정하고 빠르게 처리한다", type: "driver" },
-      { text: "빠진 부분이 없는지 끝까지 점검한다", type: "analyst" }
+      { text: "🚀 덕분에 일이 빠르게 진행됐어요", type: "driver" },
+      { text: "🧭 덕분에 체계가 잡혔어요", type: "planner" },
+      { text: "🤝 덕분에 분위기가 좋아졌어요", type: "connector" },
+      { text: "🔍 덕분에 결과가 탄탄해졌어요", type: "analyst" }
     ]
   },
   {
-    q: "좋은 팀이라고 느끼는 순간은?",
+    q: "Q10. 프로그램을 평가할 때 나는?",
     options: [
-      { text: "역할과 일정이 명확하게 정리되어 있을 때", type: "planner" },
-      { text: "서로 편하게 말하고 도와줄 수 있을 때", type: "connector" }
+      { text: "🚀 목표 달성 여부를 먼저 본다", type: "driver" },
+      { text: "🧭 운영 과정과 일정이 적절했는지 본다", type: "planner" },
+      { text: "🤝 참여자 만족도와 분위기를 본다", type: "connector" },
+      { text: "🔍 성과지표와 데이터를 본다", type: "analyst" }
+    ]
+  },
+  {
+    q: "Q11. 갑작스러운 민원이나 요청이 들어왔다.",
+    options: [
+      { text: "🚀 가능한 해결책부터 안내한다", type: "driver" },
+      { text: "🧭 처리 절차와 담당자를 확인한다", type: "planner" },
+      { text: "🤝 먼저 충분히 듣고 공감한다", type: "connector" },
+      { text: "🔍 사실관계와 기록을 확인한다", type: "analyst" }
+    ]
+  },
+  {
+    q: "Q12. 팀 프로젝트에서 나는 보통?",
+    options: [
+      { text: "🚀 방향을 잡고 앞으로 끌고 간다", type: "driver" },
+      { text: "🧭 역할과 일정을 정리한다", type: "planner" },
+      { text: "🤝 사람들을 연결하고 참여를 돕는다", type: "connector" },
+      { text: "🔍 자료와 내용을 검토한다", type: "analyst" }
+    ]
+  },
+  {
+    q: "Q13. 좋은 기획이라고 느끼는 기준은?",
+    options: [
+      { text: "🚀 실제로 실행 가능해야 한다", type: "driver" },
+      { text: "🧭 구조와 일정이 명확해야 한다", type: "planner" },
+      { text: "🤝 참여자와 현장의 필요가 반영되어야 한다", type: "connector" },
+      { text: "🔍 근거와 논리가 탄탄해야 한다", type: "analyst" }
+    ]
+  },
+  {
+    q: "Q14. 회의가 길어지고 있다. 나는?",
+    options: [
+      { text: "🚀 이제 결정하자고 말한다", type: "driver" },
+      { text: "🧭 논의 내용을 정리하고 다음 단계를 잡는다", type: "planner" },
+      { text: "🤝 아직 말하지 않은 사람의 의견을 묻는다", type: "connector" },
+      { text: "🔍 결정 전에 확인할 쟁점을 짚는다", type: "analyst" }
+    ]
+  },
+  {
+    q: "Q15. 업무 중 가장 답답한 상황은?",
+    options: [
+      { text: "🚀 결정이 계속 미뤄질 때", type: "driver" },
+      { text: "🧭 기준과 절차가 불명확할 때", type: "planner" },
+      { text: "🤝 소통 없이 일이 진행될 때", type: "connector" },
+      { text: "🔍 근거 없이 결론이 날 때", type: "analyst" }
+    ]
+  },
+  {
+    q: "Q16. 내가 팀에 주는 힘은?",
+    options: [
+      { text: "🚀 움직이게 하는 힘", type: "driver" },
+      { text: "🧭 정리하고 안정시키는 힘", type: "planner" },
+      { text: "🤝 연결하고 따뜻하게 만드는 힘", type: "connector" },
+      { text: "🔍 확인하고 탄탄하게 만드는 힘", type: "analyst" }
     ]
   }
 ];
@@ -308,30 +387,34 @@ const results = {
   driver: {
     title: "🚀 추진형",
     image: "driver.png",
-    desc: "당신은 방향이 정해지면 빠르게 움직이는 실행 중심 업무스타일입니다. 일이 멈춰 있을 때 흐름을 만들고, 팀이 앞으로 나아가도록 에너지를 주는 사람입니다.",
-    strengths: ["결정과 실행이 빠릅니다.", "위기 상황에서 대처력이 좋습니다.", "팀의 추진력을 높입니다."],
-    tips: ["충분한 설명을 함께하면 신뢰가 더 높아집니다.", "속도만큼 팀원의 이해도도 확인해보세요.", "계획형, 분석형과 함께하면 완성도가 올라갑니다."]
+    desc: "당신은 일이 멈춰 있을 때 먼저 움직이는 실행 중심 업무스타일입니다. 방향이 정해지면 빠르게 결단하고, 팀이 앞으로 나아가도록 에너지를 만들어냅니다.",
+    strengths: ["빠른 실행력과 결단력이 있습니다.", "위기 상황에서 대처가 빠릅니다.", "팀의 속도와 추진력을 높입니다."],
+    tips: ["충분한 설명을 함께하면 신뢰가 더 높아집니다.", "속도만큼 팀원의 이해도도 확인해보세요.", "설계형, 분석형과 함께하면 완성도가 올라갑니다."],
+    partners: ["🧭 설계형 연이: 추진력에 체계를 더해줍니다.", "🔍 분석형 연이: 빠른 실행에 근거와 안정성을 보완해줍니다."]
   },
   planner: {
     title: "🧭 설계형",
     image: "planner.png",
-    desc: "당신은 전체 흐름을 보고 체계적으로 준비하는 업무스타일입니다. 일정, 역할, 절차를 정리하며 팀이 안정적으로 움직이도록 기반을 만드는 사람입니다.",
+    desc: "당신은 전체 흐름을 보고 체계적으로 준비하는 업무스타일입니다. 일정, 역할, 절차를 정리하며 팀이 안정적으로 움직이도록 기반을 만듭니다.",
     strengths: ["업무 구조화에 강합니다.", "일정과 역할 정리가 뛰어납니다.", "실수를 줄이고 안정감을 줍니다."],
-    tips: ["완벽한 계획보다 적절한 시작도 중요합니다.", "추진형과 협업하면 실행 속도가 빨라집니다.", "계획을 공유 가능한 언어로 풀어주면 좋습니다."]
+    tips: ["완벽한 계획보다 적절한 시작도 중요합니다.", "추진형과 협업하면 실행 속도가 빨라집니다.", "계획을 공유 가능한 언어로 풀어주면 좋습니다."],
+    partners: ["🚀 추진형 연이: 계획을 실제 실행으로 연결해줍니다.", "🤝 조율형 연이: 계획 안에 사람의 흐름을 더해줍니다."]
   },
   connector: {
     title: "🤝 조율형",
     image: "connector.png",
-    desc: "당신은 사람과 관계를 중심에 두는 협업형 업무스타일입니다. 팀 분위기를 살피고, 의견을 연결하며, 함께 일하는 힘을 만들어내는 사람입니다.",
-    strengths: ["소통과 분위기 조성에 강합니다.", "갈등을 줄이고 참여를 이끌어냅니다.", "팀워크를 높입니다."],
-    tips: ["모두를 배려하느라 자신의 부담이 커지지 않게 조절하세요.", "결정이 필요한 순간에는 기준을 명확히 세워보세요.", "분석형, 추진형과 함께하면 균형이 좋아집니다."]
+    desc: "당신은 사람과 관계를 중심에 두는 협업형 업무스타일입니다. 팀 분위기를 살피고, 의견을 연결하며, 함께 일하는 힘을 만들어냅니다.",
+    strengths: ["소통과 분위기 조성에 강합니다.", "갈등을 줄이고 참여를 이끌어냅니다.", "팀워크와 신뢰를 높입니다."],
+    tips: ["모두를 배려하느라 자신의 부담이 커지지 않게 조절하세요.", "결정이 필요한 순간에는 기준을 명확히 세워보세요.", "추진형, 분석형과 함께하면 균형이 좋아집니다."],
+    partners: ["🚀 추진형 연이: 조율된 의견을 실행으로 이끌어줍니다.", "🔍 분석형 연이: 관계 중심에 객관성을 더해줍니다."]
   },
   analyst: {
     title: "🔍 분석형",
     image: "analyst.png",
-    desc: "당신은 근거와 정확성을 중요하게 보는 검토 중심 업무스타일입니다. 자료의 허점을 찾고, 더 탄탄한 결과물이 나오도록 돕는 사람입니다.",
+    desc: "당신은 근거와 정확성을 중요하게 보는 검토 중심 업무스타일입니다. 자료의 허점을 찾고, 더 탄탄한 결과물이 나오도록 돕습니다.",
     strengths: ["근거와 논리에 강합니다.", "오류와 리스크를 잘 발견합니다.", "결과물의 신뢰도를 높입니다."],
-    tips: ["검토 의견을 제안형으로 전달하면 협업이 부드러워집니다.", "때로는 완벽보다 마감도 중요합니다.", "조율형과 함께하면 전달력이 좋아집니다."]
+    tips: ["검토 의견을 제안형으로 전달하면 협업이 부드러워집니다.", "때로는 완벽보다 마감도 중요합니다.", "조율형, 추진형과 함께하면 전달력과 실행력이 좋아집니다."],
+    partners: ["🤝 조율형 연이: 분석 결과를 부드럽게 전달해줍니다.", "🚀 추진형 연이: 검토 내용을 실행으로 연결해줍니다."]
   }
 };
 
@@ -395,6 +478,9 @@ function showResult() {
 
   document.getElementById("tips").innerHTML =
     result.tips.map(item => `<li>${item}</li>`).join("");
+
+  document.getElementById("partners").innerHTML =
+    result.partners.map(item => `<li>${item}</li>`).join("");
 }
 
 function restartTest() {
